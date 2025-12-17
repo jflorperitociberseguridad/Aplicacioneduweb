@@ -5,11 +5,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
-import uuid
-from datetime import datetime, timezone
-
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -19,52 +14,56 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create the main app without a prefix
-app = FastAPI()
+# Create the main app
+app = FastAPI(
+    title="Aula Virtual API",
+    description="Plataforma de aula virtual tipo Moodle",
+    version="1.0.0"
+)
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# Import and initialize routes
+from routes import (
+    auth_router, users_router, courses_router, 
+    categories_router, sections_router, items_router,
+    enrollments_router
+)
+from routes.auth import init_router as init_auth
+from routes.users import init_router as init_users
+from routes.courses import init_router as init_courses
+from routes.categories import init_router as init_categories
+from routes.sections import init_router as init_sections
+from routes.items import init_router as init_items
+from routes.enrollments import init_router as init_enrollments
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+# Initialize all routes with database
+init_auth(db)
+init_users(db)
+init_courses(db)
+init_categories(db)
+init_sections(db)
+init_items(db)
+init_enrollments(db)
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
+# Include all routers
+api_router.include_router(auth_router)
+api_router.include_router(users_router)
+api_router.include_router(courses_router)
+api_router.include_router(categories_router)
+api_router.include_router(sections_router)
+api_router.include_router(items_router)
+api_router.include_router(enrollments_router)
 
-# Add your routes to the router instead of directly to app
+# Health check
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Aula Virtual API", "status": "running"}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
-
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+@api_router.get("/health")
+async def health():
+    return {"status": "healthy"}
 
 # Include the router in the main app
 app.include_router(api_router)
@@ -83,6 +82,43 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+@app.on_event("startup")
+async def startup_event():
+    """Create indexes on startup"""
+    # Users
+    await db.users.create_index("email", unique=True)
+    await db.users.create_index("id", unique=True)
+    
+    # Courses
+    await db.courses.create_index("shortname", unique=True)
+    await db.courses.create_index("id", unique=True)
+    await db.courses.create_index("category_id")
+    await db.courses.create_index("status")
+    
+    # Categories
+    await db.course_categories.create_index("id", unique=True)
+    await db.course_categories.create_index("parent_id")
+    
+    # Sections
+    await db.course_sections.create_index("id", unique=True)
+    await db.course_sections.create_index([("course_id", 1), ("position", 1)], unique=True)
+    
+    # Items
+    await db.course_items.create_index("id", unique=True)
+    await db.course_items.create_index([("section_id", 1), ("position", 1)])
+    await db.course_items.create_index("course_id")
+    
+    # Enrollments
+    await db.enrollments.create_index("id", unique=True)
+    await db.enrollments.create_index([("course_id", 1), ("user_id", 1)], unique=True)
+    
+    # Audit logs
+    await db.audit_logs.create_index("entity_type")
+    await db.audit_logs.create_index("user_id")
+    await db.audit_logs.create_index("timestamp")
+    
+    logger.info("Database indexes created")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
