@@ -168,7 +168,7 @@ class CourseItemBase(BaseModel):
 
 
 class CourseItemCreate(CourseItemBase):
-    section_id: str
+    section_id: Optional[str] = None  # Optional because it's provided via URL
 
 
 class CourseItemUpdate(BaseModel):
