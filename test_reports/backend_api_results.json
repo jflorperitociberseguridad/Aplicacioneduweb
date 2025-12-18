@@ -1,8 +1,8 @@
 {
-  "timestamp": "2025-12-18T00:01:16.431468",
-  "total_tests": 12,
-  "passed_tests": 11,
-  "success_rate": 91.66666666666666,
+  "timestamp": "2025-12-18T00:01:27.521947",
+  "total_tests": 14,
+  "passed_tests": 14,
+  "success_rate": 100.0,
   "results": [
     {
       "test": "API Health Check",
@@ -40,7 +40,7 @@
     {
       "test": "List Courses",
       "success": true,
-      "details": "Found 2 courses",
+      "details": "Found 3 courses",
       "response_data": null
     },
     {
@@ -69,8 +69,20 @@
     },
     {
       "test": "Create New Course",
-      "success": false,
-      "details": "Status: 200",
+      "success": true,
+      "details": "Created course: TEST-API-000127",
+      "response_data": null
+    },
+    {
+      "test": "Update Course",
+      "success": true,
+      "details": "Updated course: 7ef9559b-8c27-455d-95d6-fb51fd55a034",
+      "response_data": null
+    },
+    {
+      "test": "Get Course Sections",
+      "success": true,
+      "details": "Found 4 sections",
       "response_data": null
     },
     {
