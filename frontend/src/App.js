@@ -160,6 +160,26 @@ function AppRoutes() {
         }
       />
 
+      {/* Course Enrollments */}
+      <Route
+        path="/courses/:courseId/enrollments"
+        element={
+          <ProtectedRoute>
+            <CourseEnrollments />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Messages */}
+      <Route
+        path="/messages"
+        element={
+          <ProtectedRoute>
+            <MessageList />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Placeholder routes */}
       <Route
         path="/my-courses"
