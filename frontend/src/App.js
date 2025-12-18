@@ -10,6 +10,10 @@ import Dashboard from '@/pages/Dashboard';
 import CourseList from '@/pages/courses/CourseList';
 import CourseForm from '@/pages/courses/CourseForm';
 import CourseView from '@/pages/courses/CourseView';
+import ItemForm from '@/pages/courses/ItemForm';
+import UserList from '@/pages/users/UserList';
+import UserProfile from '@/pages/users/UserProfile';
+import CategoryList from '@/pages/categories/CategoryList';
 
 import './App.css';
 
