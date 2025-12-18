@@ -112,28 +112,58 @@ function AppRoutes() {
         }
       />
 
+      {/* Course Items */}
+      <Route
+        path="/courses/:courseId/sections/:sectionId/items/new"
+        element={
+          <ProtectedRoute>
+            <ItemForm />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/courses/:courseId/items/:itemId/edit"
+        element={
+          <ProtectedRoute>
+            <ItemForm />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Categories */}
+      <Route
+        path="/categories"
+        element={
+          <ProtectedRoute>
+            <CategoryList />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Users */}
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute>
+            <UserList />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users/:userId"
+        element={
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Placeholder routes */}
       <Route
         path="/my-courses"
         element={
           <ProtectedRoute>
             <div className="text-center py-12"><h1 className="text-2xl font-bold">Mis Cursos</h1><p className="text-gray-500">Próximamente...</p></div>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/categories"
-        element={
-          <ProtectedRoute>
-            <div className="text-center py-12"><h1 className="text-2xl font-bold">Categorías</h1><p className="text-gray-500">Próximamente...</p></div>
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/users"
-        element={
-          <ProtectedRoute>
-            <div className="text-center py-12"><h1 className="text-2xl font-bold">Usuarios</h1><p className="text-gray-500">Próximamente...</p></div>
           </ProtectedRoute>
         }
       />
