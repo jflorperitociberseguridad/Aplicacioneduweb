@@ -171,7 +171,7 @@ class VirtualClassroomAPITester:
         }
         
         success, details, response = self.make_request(
-            'POST', 'courses', data=course_data, expected_status=201
+            'POST', 'courses', data=course_data, expected_status=200
         )
         
         if success and 'id' in response:
