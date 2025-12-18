@@ -162,7 +162,7 @@ class VirtualClassroomAPITester:
         course_data = {
             "fullname": "Test Course API",
             "shortname": f"TEST-API-{datetime.now().strftime('%H%M%S')}",
-            "category_id": "default-category",
+            "category_id": "cat-tecnologia",
             "summary": "Test course created via API testing",
             "format": "topics",
             "num_sections": 3,
