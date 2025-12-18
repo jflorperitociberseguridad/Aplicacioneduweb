@@ -30,6 +30,7 @@ from routes import (
     categories_router, sections_router, items_router,
     enrollments_router
 )
+from routes.messages import router as messages_router
 from routes.auth import init_router as init_auth
 from routes.users import init_router as init_users
 from routes.courses import init_router as init_courses
@@ -37,6 +38,7 @@ from routes.categories import init_router as init_categories
 from routes.sections import init_router as init_sections
 from routes.items import init_router as init_items
 from routes.enrollments import init_router as init_enrollments
+from routes.messages import init_router as init_messages
 
 # Initialize all routes with database
 init_auth(db)
@@ -46,6 +48,7 @@ init_categories(db)
 init_sections(db)
 init_items(db)
 init_enrollments(db)
+init_messages(db)
 
 # Include all routers
 api_router.include_router(auth_router)
@@ -55,6 +58,7 @@ api_router.include_router(categories_router)
 api_router.include_router(sections_router)
 api_router.include_router(items_router)
 api_router.include_router(enrollments_router)
+api_router.include_router(messages_router)
 
 # Health check
 @api_router.get("/")
