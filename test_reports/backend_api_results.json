@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-12-18T00:00:49.150786",
+  "timestamp": "2025-12-18T00:01:16.431468",
   "total_tests": 12,
   "passed_tests": 11,
   "success_rate": 91.66666666666666,
@@ -40,7 +40,7 @@
     {
       "test": "List Courses",
       "success": true,
-      "details": "Found 1 courses",
+      "details": "Found 2 courses",
       "response_data": null
     },
     {
@@ -58,19 +58,19 @@
     {
       "test": "Get Single Course",
       "success": true,
-      "details": "Course: Ciberseguridad con Inteligencia Artificial",
+      "details": "Course: Test Course API",
       "response_data": null
     },
     {
       "test": "Get Course Sections",
       "success": true,
-      "details": "Found 6 sections",
+      "details": "Found 4 sections",
       "response_data": null
     },
     {
       "test": "Create New Course",
       "success": false,
-      "details": "Status: 400",
+      "details": "Status: 200",
       "response_data": null
     },
     {
