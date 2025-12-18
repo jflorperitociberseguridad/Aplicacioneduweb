@@ -81,8 +81,7 @@ async def create_item(
     )
     next_position = (max_item["position"] + 1) if max_item else 0
     
-    item_dict = item_data.model_dump()
-    item_dict.pop('section_id', None)  # Remove if present to avoid duplicate
+    item_dict = item_data.model_dump(exclude={'section_id', 'position'})
     
     item = CourseItem(
         **item_dict,
