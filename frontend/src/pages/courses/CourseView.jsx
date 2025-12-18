@@ -245,18 +245,34 @@ const CourseView = () => {
 
         {/* Action bar */}
         {canEdit && (
-          <div className="flex items-center justify-between mt-4 p-3 bg-gray-50 rounded-lg">
+          <div className="flex items-center justify-between mt-4 p-4 bg-blue-50 border border-blue-100 rounded-lg">
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
+              <div className={cn(
+                "flex items-center gap-3 px-4 py-2 rounded-lg transition-all",
+                editMode ? "bg-blue-600 text-white" : "bg-white border border-gray-200"
+              )}>
+                <Edit size={16} className={editMode ? "text-white" : "text-gray-500"} />
+                <Label 
+                  htmlFor="edit-mode" 
+                  className={cn(
+                    "text-sm font-medium cursor-pointer",
+                    editMode ? "text-white" : "text-gray-700"
+                  )}
+                >
+                  Modo edición
+                </Label>
                 <Switch
                   id="edit-mode"
                   checked={editMode}
                   onCheckedChange={setEditMode}
+                  className="data-[state=checked]:bg-white data-[state=checked]:text-blue-600"
                 />
-                <Label htmlFor="edit-mode" className="text-sm font-medium">
-                  Modo edición
-                </Label>
               </div>
+              {editMode && (
+                <span className="text-sm text-blue-700 font-medium">
+                  ✓ Edición activa - arrastra elementos para reordenar
+                </span>
+              )}
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={() => navigate(`/courses/${courseId}/edit`)}>
